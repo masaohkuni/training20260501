@@ -38,6 +38,42 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Soccer Team": {
+        "description": "Practice team soccer skills and play competitive matches",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 6:00 PM",
+        "max_participants": 18,
+        "participants": ["alex@mergington.edu", "kevin@mergington.edu"]
+    },
+    "Swimming Club": {
+        "description": "Build swimming endurance and technique in the school pool",
+        "schedule": "Mondays, Wednesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": ["lily@mergington.edu", "noah@mergington.edu"]
+    },
+    "Art Club": {
+        "description": "Create drawings, paintings, and mixed media art projects",
+        "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 15,
+        "participants": ["ava@mergington.edu", "mia@mergington.edu"]
+    },
+    "Drama Club": {
+        "description": "Rehearse and perform scenes, monologues, and school plays",
+        "schedule": "Fridays, 3:30 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": ["jack@mergington.edu", "harper@mergington.edu"]
+    },
+    "Debate Team": {
+        "description": "Prepare arguments and participate in debate competitions",
+        "schedule": "Tuesdays, 5:00 PM - 6:30 PM",
+        "max_participants": 16,
+        "participants": ["isabella@mergington.edu", "mason@mergington.edu"]
+    },
+    "Robotics Club": {
+        "description": "Design, build, and program robots for challenges and contests",
+        "schedule": "Thursdays, 4:00 PM - 6:00 PM",
+        "max_participants": 14,
+        "participants": ["sophia@mergington.edu", "liam@mergington.edu"]
     }
 }
 
@@ -51,7 +87,6 @@ def root():
 def get_activities():
     return activities
 
-
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
@@ -62,6 +97,10 @@ def signup_for_activity(activity_name: str, email: str):
     # Get the specific activity
     activity = activities[activity_name]
 
+    # Validate student is not already signed up
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student is already signed up for this activity")
+
     # Add student
     activity["participants"].append(email)
-    return {"message": f"Signed up {email} for {activity_name}"}
+    return {"message": f"Signed up {email} for {activity_name}"} 
